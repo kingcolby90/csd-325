@@ -1,0 +1,51 @@
+#colby king module 9 assignment
+import requests
+import json
+
+# Part 1: Test the connection to the API from the tutorial
+print("=== PART 1: TESTING API CONNECTION ===")
+response = requests.get("http://api.open-notify.org/astros.json")
+print(f"Status code: {response.status_code}")
+print(f"Data type: {type(response.text)}")
+print(f"Raw response: {response.text}")
+
+# Converting the response text to a Python dictionary
+astronaut_data = json.loads(response.text)
+print(f"Data type after conversion: {type(astronaut_data)}")
+print(f"Example data - Number of astronauts: {astronaut_data['number']}")
+print("\n")
+
+# Part 2: Astronaut data with formatting
+print("=== PART 2: FORMATTED ASTRONAUT DATA ===")
+people = astronaut_data['people']
+print(f"There are currently {astronaut_data['number']} astronauts in space:")
+
+for person in people:
+    print(f"{person['name']} is on the {person['craft']}")
+print("\n")
+
+# Part 3: Custom API - Using Weather API
+print("=== PART 3: CUSTOM API - WEATHER DATA ===")
+
+# Testing connection to Open Weather Map API
+weather_response = requests.get("https://goweather.herokuapp.com/weather/London")
+print(f"Status code: {weather_response.status_code}")
+
+# Print raw response
+print("=== Raw Weather Response ===")
+print(f"Raw response: {weather_response.text}")
+
+# Print formatted response
+print("\n=== Formatted Weather Response ===")
+weather_data = json.loads(weather_response.text)
+
+print(f"Weather in London:")
+print(f"Temperature: {weather_data.get('temperature', 'N/A')}")
+print(f"Wind: {weather_data.get('wind', 'N/A')}")
+print(f"Description: {weather_data.get('description', 'N/A')}")
+
+# Print forecast if available
+if 'forecast' in weather_data and weather_data['forecast']:
+    print("\nForecast for the next days:")
+    for day in weather_data['forecast']:
+        print(f"Day {day.get('day', 'N/A')}: {day.get('temperature', 'N/A')}, Wind: {day.get('wind', 'N/A')}")
